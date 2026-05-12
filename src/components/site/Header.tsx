@@ -1,5 +1,5 @@
-import { Link } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { Link, useNavigate } from "@tanstack/react-router";
+import { useEffect, useState, type FormEvent } from "react";
 import { Search, Menu, X, User as UserIcon, LogOut, ShieldCheck } from "lucide-react";
 import { fetchCategories, type Category } from "@/lib/queries";
 import { useAuth } from "@/hooks/use-auth";
@@ -15,9 +15,17 @@ function bnDateNow() {
 export function Header() {
   const [cats, setCats] = useState<Category[]>([]);
   const [open, setOpen] = useState(false);
+  const [q, setQ] = useState("");
+  const nav = useNavigate();
   const { user, isEditor, signOut } = useAuth();
 
   useEffect(() => { fetchCategories().then(setCats).catch(() => {}); }, []);
+
+  const onSearch = (e: FormEvent) => {
+    e.preventDefault();
+    if (!q.trim()) return;
+    nav({ to: "/search", search: { q: q.trim() } });
+  };
 
   const mainCats = cats.slice(0, 10);
 
@@ -57,10 +65,17 @@ export function Header() {
             <div className="text-[10px] text-muted-foreground tracking-wide mt-0.5">নির্ভরযোগ্য সংবাদ মাধ্যম</div>
           </div>
         </Link>
-        <div className="hidden md:flex flex-1 max-w-md mx-6 relative">
-          <input placeholder="খুঁজুন..." className="w-full h-10 pl-4 pr-10 rounded-full border border-input bg-secondary/50 focus:outline-none focus:ring-2 focus:ring-ring text-sm" />
-          <Search className="w-4 h-4 absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground" />
-        </div>
+        <form onSubmit={onSearch} className="hidden md:flex flex-1 max-w-md mx-6 relative">
+          <input
+            value={q}
+            onChange={(e) => setQ(e.target.value)}
+            placeholder="খুঁজুন..."
+            className="w-full h-10 pl-4 pr-10 rounded-full border border-input bg-secondary/50 focus:outline-none focus:ring-2 focus:ring-ring text-sm"
+          />
+          <button type="submit" aria-label="search" className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-primary">
+            <Search className="w-4 h-4" />
+          </button>
+        </form>
         <button className="md:hidden" onClick={() => setOpen(!open)} aria-label="menu">
           {open ? <X /> : <Menu />}
         </button>
