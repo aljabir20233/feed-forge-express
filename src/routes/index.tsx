@@ -1,10 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
-import { fetchPublishedArticles, fetchCategories, type Article, type Category } from "@/lib/queries";
+import { useQuery } from "@tanstack/react-query";
+import { fetchPublishedArticles, fetchCategories, type Article } from "@/lib/queries";
 import { ArticleCard } from "@/components/site/ArticleCard";
 import { BreakingTicker } from "@/components/site/BreakingTicker";
 import { HeroSlider } from "@/components/site/HeroSlider";
 import { SidebarTabs } from "@/components/site/SidebarTabs";
+import { HeadlinesAggregator } from "@/components/site/HeadlinesAggregator";
 import { Link } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/")({
@@ -36,27 +37,28 @@ function Section({ title, slug, articles }: { title: string; slug: string; artic
 }
 
 function HomePage() {
-  const [articles, setArticles] = useState<Article[]>([]);
-  const [cats, setCats] = useState<Category[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { data: articles = [], isLoading: la } = useQuery({
+    queryKey: ["articles", "home"],
+    queryFn: () => fetchPublishedArticles(50),
+    staleTime: 1000 * 60 * 2,
+  });
+  const { data: cats = [], isLoading: lc } = useQuery({
+    queryKey: ["categories"],
+    queryFn: fetchCategories,
+    staleTime: 1000 * 60 * 30,
+  });
 
-  useEffect(() => {
-    Promise.all([fetchPublishedArticles(50), fetchCategories()])
-      .then(([a, c]) => { setArticles(a); setCats(c); })
-      .finally(() => setLoading(false));
-  }, []);
-
-  if (loading) {
+  if (la || lc) {
     return <div className="news-container py-20 text-center text-muted-foreground">লোড হচ্ছে...</div>;
   }
 
-  const breaking = articles.filter(a => a.is_breaking);
-  const featured = articles.filter(a => a.is_featured);
+  const breaking = articles.filter((a: Article) => a.is_breaking);
+  const featured = articles.filter((a: Article) => a.is_featured);
   const hero = featured[0] ?? articles[0];
   const heroSide = (featured.slice(1, 3).length ? featured.slice(1, 3) : articles.slice(1, 3));
   const latest = articles.slice(0, 6);
 
-  const bySlug = (slug: string) => articles.filter(a => a.categories?.slug === slug);
+  const bySlug = (slug: string) => articles.filter((a: Article) => a.categories?.slug === slug);
 
   return (
     <>
@@ -74,7 +76,7 @@ function HomePage() {
               <ArticleCard a={hero} size="hero" />
             </div>
             <div className="space-y-4">
-              {heroSide.map(a => <ArticleCard key={a.id} a={a} size="lg" />)}
+              {heroSide.map((a: Article) => <ArticleCard key={a.id} a={a} size="lg" />)}
             </div>
           </div>
         )}
@@ -88,17 +90,20 @@ function HomePage() {
               </h2>
             </div>
             <div className="grid sm:grid-cols-2 gap-4">
-              {latest.map(a => <ArticleCard key={a.id} a={a} />)}
+              {latest.map((a: Article) => <ArticleCard key={a.id} a={a} />)}
             </div>
           </div>
           <SidebarTabs
             latest={articles.slice(0, 8)}
-            popular={[...articles].sort((x, y) => y.view_count - x.view_count).slice(0, 8)}
+            popular={[...articles].sort((x: Article, y: Article) => y.view_count - x.view_count).slice(0, 8)}
           />
         </div>
 
+        {/* HEADLINES AGGREGATOR */}
+        <HeadlinesAggregator />
+
         {/* CATEGORY SECTIONS */}
-        {cats.filter(c => bySlug(c.slug).length > 0).slice(0, 8).map(c => (
+        {cats.filter((c: any) => bySlug(c.slug).length > 0).slice(0, 8).map((c: any) => (
           <Section key={c.id} title={c.name} slug={c.slug} articles={bySlug(c.slug)} />
         ))}
       </div>
