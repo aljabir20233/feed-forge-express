@@ -3,6 +3,7 @@ import { useEffect, useState, type FormEvent } from "react";
 import { Search, Menu, X, User as UserIcon, LogOut, ShieldCheck } from "lucide-react";
 import { fetchCategories, type Category } from "@/lib/queries";
 import { useAuth } from "@/hooks/use-auth";
+import logo from "@/assets/logo.png";
 
 function bnDateNow() {
   const months = ["জানুয়ারি","ফেব্রুয়ারি","মার্চ","এপ্রিল","মে","জুন","জুলাই","আগস্ট","সেপ্টেম্বর","অক্টোবর","নভেম্বর","ডিসেম্বর"];
@@ -58,11 +59,11 @@ export function Header() {
 
       {/* logo row */}
       <div className="news-container flex items-center justify-between py-4 gap-4">
-        <Link to="/" className="flex items-center gap-2">
-          <div className="w-11 h-11 rounded bg-primary text-primary-foreground grid place-items-center font-serif font-bold text-2xl">খ</div>
-          <div>
-            <div className="font-serif text-2xl md:text-3xl font-bold text-headline leading-none">খবর<span className="text-primary">২৪</span></div>
-            <div className="text-[10px] text-muted-foreground tracking-wide mt-0.5">নির্ভরযোগ্য সংবাদ মাধ্যম</div>
+        <Link to="/" className="flex items-center gap-3">
+          <img src={logo} alt="Bank Bima Khabor logo" className="h-12 md:h-14 w-auto" />
+          <div className="hidden sm:block">
+            <div className="font-serif text-xl md:text-2xl font-bold text-primary leading-none">Bank Bima Khabor</div>
+            <div className="text-[10px] text-muted-foreground tracking-wide mt-1">A Financial Magazine Monthly</div>
           </div>
         </Link>
         <form onSubmit={onSearch} className="hidden md:flex flex-1 max-w-md mx-6 relative">

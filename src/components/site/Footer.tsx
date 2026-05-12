@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { fetchCategories, type Category } from "@/lib/queries";
+import logo from "@/assets/logo.png";
 
 export function Footer() {
   const [cats, setCats] = useState<Category[]>([]);
@@ -9,11 +10,11 @@ export function Footer() {
     <footer className="mt-16 bg-sidebar text-sidebar-foreground">
       <div className="news-container py-12 grid md:grid-cols-4 gap-8">
         <div>
-          <div className="flex items-center gap-2 mb-3">
-            <div className="w-10 h-10 rounded bg-primary text-primary-foreground grid place-items-center font-serif font-bold text-xl">খ</div>
-            <div className="font-serif text-2xl font-bold">খবর<span className="text-primary">২৪</span></div>
+          <div className="flex items-center gap-3 mb-3">
+            <img src={logo} alt="Bank Bima Khabor" className="h-12 w-auto bg-white rounded p-1" />
+            <div className="font-serif text-xl font-bold text-primary">Bank Bima Khabor</div>
           </div>
-          <p className="text-sm opacity-80 leading-relaxed">দেশের সর্বশেষ এবং নির্ভরযোগ্য সংবাদের ঠিকানা। ব্যাংক, বীমা, অর্থনীতি এবং জাতীয় খবরে আপনার বিশ্বস্ত সঙ্গী।</p>
+          <p className="text-sm opacity-80 leading-relaxed">A Financial Magazine Monthly. দেশের ব্যাংক, বীমা ও অর্থনীতির নির্ভরযোগ্য সংবাদের ঠিকানা।</p>
         </div>
         <div>
           <h4 className="text-sm font-semibold mb-3 text-primary">বিভাগ</h4>
@@ -33,12 +34,16 @@ export function Footer() {
         </div>
         <div>
           <h4 className="text-sm font-semibold mb-3 text-primary">যোগাযোগ</h4>
-          <p className="text-sm opacity-80 leading-relaxed">সম্পাদক: জনাব কামাল হোসেন<br/>ইমেইল: editor@khobor24.bd<br/>ফোন: +৮৮ ০২ ৯৮৭৬৫৪৩</p>
+          <p className="text-sm opacity-80 leading-relaxed">
+            সম্পাদক: জনাব কামাল হোসেন<br/>
+            <span>ইমেইল: editor@bankbimakhabor.com</span><br/>
+            ফোন: +৮৮ ০২ ৯৮৭৬৫৪৩
+          </p>
         </div>
       </div>
       <div className="border-t border-sidebar-border">
         <div className="news-container py-4 text-xs opacity-70 flex flex-col md:flex-row justify-between gap-2">
-          <span>© {new Date().getFullYear()} খবর২৪ • সর্বস্বত্ব সংরক্ষিত</span>
+          <span>© {new Date().getFullYear()} Bank Bima Khabor • সর্বস্বত্ব সংরক্ষিত</span>
           <span>প্রকাশক ও সম্পাদক কর্তৃক প্রকাশিত</span>
         </div>
       </div>
