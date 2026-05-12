@@ -1,10 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
-import { fetchPublishedArticles, fetchCategories, type Article, type Category } from "@/lib/queries";
+import { useQuery } from "@tanstack/react-query";
+import { fetchPublishedArticles, fetchCategories, type Article } from "@/lib/queries";
 import { ArticleCard } from "@/components/site/ArticleCard";
 import { BreakingTicker } from "@/components/site/BreakingTicker";
 import { HeroSlider } from "@/components/site/HeroSlider";
 import { SidebarTabs } from "@/components/site/SidebarTabs";
+import { HeadlinesAggregator } from "@/components/site/HeadlinesAggregator";
 import { Link } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/")({
