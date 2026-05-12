@@ -2,7 +2,9 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { fetchArticleBySlug, fetchPublishedArticles, formatBnDate, type Article } from "@/lib/queries";
 import { ArticleCard } from "@/components/site/ArticleCard";
-import { Calendar, Eye, Share2 } from "lucide-react";
+import { ShareButtons } from "@/components/site/ShareButtons";
+import { supabase } from "@/integrations/supabase/client";
+import { Calendar, Eye } from "lucide-react";
 
 export const Route = createFileRoute("/article/$slug")({
   component: ArticlePage,
@@ -18,6 +20,7 @@ function ArticlePage() {
     setLoading(true);
     fetchArticleBySlug(slug).then(setA).finally(() => setLoading(false));
     fetchPublishedArticles(8).then(setRelated);
+    supabase.rpc("increment_article_view", { _slug: slug }).then(() => {});
   }, [slug]);
 
   if (loading) return <div className="news-container py-20 text-center text-muted-foreground">লোড হচ্ছে...</div>;
@@ -41,10 +44,10 @@ function ArticlePage() {
           )}
           <h1 className="font-serif text-2xl md:text-4xl font-bold leading-tight mb-4 text-headline">{a.title}</h1>
           {a.excerpt && <p className="text-lg text-muted-foreground mb-5 leading-relaxed">{a.excerpt}</p>}
-          <div className="flex items-center gap-5 text-xs text-muted-foreground border-y border-border py-3 mb-6">
+          <div className="flex flex-wrap items-center gap-5 text-xs text-muted-foreground border-y border-border py-3 mb-6">
             <span className="flex items-center gap-1.5"><Calendar className="w-3.5 h-3.5" /> {formatBnDate(a.published_at)}</span>
             <span className="flex items-center gap-1.5"><Eye className="w-3.5 h-3.5" /> {bnNum(a.view_count)} জন পড়েছেন</span>
-            <button className="flex items-center gap-1.5 ml-auto hover:text-primary"><Share2 className="w-3.5 h-3.5" /> শেয়ার</button>
+            <div className="ml-auto"><ShareButtons title={a.title} /></div>
           </div>
           {a.cover_image && (
             <img src={a.cover_image} alt={a.title} className="w-full rounded-lg mb-6 aspect-[16/9] object-cover" />
