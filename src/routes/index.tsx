@@ -10,9 +10,9 @@ import { Link } from "@tanstack/react-router";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "খবর২৪ — দেশ ও বিশ্বের সর্বশেষ সংবাদ" },
+      { title: "Bank Bima Khabor — A Financial Magazine Monthly" },
       { name: "description", content: "ব্যাংক, বীমা, অর্থনীতি, রাজনীতি, খেলা ও বিনোদনের সর্বশেষ বাংলা সংবাদ।" },
-      { property: "og:title", content: "খবর২৪ — দেশ ও বিশ্বের সর্বশেষ সংবাদ" },
+      { property: "og:title", content: "Bank Bima Khabor — A Financial Magazine Monthly" },
     ],
   }),
   component: HomePage,
