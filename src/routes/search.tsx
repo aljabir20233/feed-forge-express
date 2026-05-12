@@ -7,8 +7,8 @@ import type { Article } from "@/lib/queries";
 
 export const Route = createFileRoute("/search")({
   validateSearch: z.object({ q: z.string().optional().default("") }),
-  head: ({ search }) => ({
-    meta: [{ title: `অনুসন্ধান: ${search.q || ""} — খবর২৪` }],
+  head: () => ({
+    meta: [{ title: "অনুসন্ধান — খবর২৪" }],
   }),
   component: SearchPage,
 });
