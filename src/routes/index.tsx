@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import { fetchPublishedArticles, fetchCategories, type Article, type Category } from "@/lib/queries";
 import { ArticleCard } from "@/components/site/ArticleCard";
 import { BreakingTicker } from "@/components/site/BreakingTicker";
+import { HeroSlider } from "@/components/site/HeroSlider";
+import { SidebarTabs } from "@/components/site/SidebarTabs";
 import { Link } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/")({
@@ -60,6 +62,11 @@ function HomePage() {
     <>
       <BreakingTicker items={breaking.length ? breaking : articles.slice(0, 5)} />
       <div className="news-container py-6">
+        {/* SLIDER */}
+        <div className="mb-6">
+          <HeroSlider items={featured.length >= 3 ? featured : articles.slice(0, 8)} />
+        </div>
+
         {/* HERO */}
         {hero && (
           <div className="grid lg:grid-cols-3 gap-4">
@@ -77,29 +84,21 @@ function HomePage() {
           <div className="lg:col-span-2">
             <div className="border-b-2 border-primary mb-4 pb-1">
               <h2 className="font-serif text-2xl font-bold text-headline">
-                <span className="bg-primary text-primary-foreground px-3 py-1 rounded-t inline-block">সর্বশেষ সংবাদ</span>
+                <span className="bg-primary text-primary-foreground px-3 py-1 rounded-t inline-block">প্রধান খবর</span>
               </h2>
             </div>
             <div className="grid sm:grid-cols-2 gap-4">
               {latest.map(a => <ArticleCard key={a.id} a={a} />)}
             </div>
           </div>
-          <aside>
-            <div className="border-b-2 border-primary mb-4 pb-1">
-              <h2 className="font-serif text-xl font-bold text-headline">
-                <span className="bg-headline text-background px-3 py-1 rounded-t inline-block">জনপ্রিয়</span>
-              </h2>
-            </div>
-            <div className="bg-card rounded-lg border border-border px-4">
-              {[...articles].sort((x,y) => y.view_count - x.view_count).slice(0, 6).map(a => (
-                <ArticleCard key={a.id} a={a} size="sm" />
-              ))}
-            </div>
-          </aside>
+          <SidebarTabs
+            latest={articles.slice(0, 8)}
+            popular={[...articles].sort((x, y) => y.view_count - x.view_count).slice(0, 8)}
+          />
         </div>
 
         {/* CATEGORY SECTIONS */}
-        {cats.filter(c => !["latest"].includes(c.slug)).slice(0, 6).map(c => (
+        {cats.filter(c => bySlug(c.slug).length > 0).slice(0, 8).map(c => (
           <Section key={c.id} title={c.name} slug={c.slug} articles={bySlug(c.slug)} />
         ))}
       </div>
