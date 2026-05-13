@@ -1,5 +1,6 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useState } from "react";
+import { useServerFn } from "@tanstack/react-start";
 import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -7,6 +8,8 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import { lovable } from "@/integrations/lovable";
+import { ensureMiltonAdmin } from "@/lib/admin-setup.functions";
+import { ShieldCheck } from "lucide-react";
 
 export const Route = createFileRoute("/login")({
   component: LoginPage,
@@ -15,10 +18,25 @@ export const Route = createFileRoute("/login")({
 function LoginPage() {
   const { signIn, signUp } = useAuth();
   const navigate = useNavigate();
+  const setupAdmin = useServerFn(ensureMiltonAdmin);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [busy, setBusy] = useState(false);
+
+  const adminLogin = async () => {
+    setBusy(true);
+    try {
+      const creds = await setupAdmin();
+      const { error } = await signIn(creds.email, creds.password);
+      if (error) { toast.error(error); setBusy(false); return; }
+      toast.success("অ্যাডমিন হিসেবে লগইন সফল");
+      navigate({ to: "/admin" });
+    } catch (e) {
+      toast.error((e as Error).message);
+      setBusy(false);
+    }
+  };
 
   const submit = async (mode: "in" | "up") => {
     setBusy(true);
