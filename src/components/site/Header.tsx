@@ -5,12 +5,41 @@ import { fetchCategories, type Category } from "@/lib/queries";
 import { useAuth } from "@/hooks/use-auth";
 import logo from "@/assets/logo.png";
 
+function bnDigits(n: number) {
+  return n.toString().replace(/\d/g, (x) => "০১২৩৪৫৬৭৮৯"[+x]);
+}
+
 function bnDateNow() {
   const months = ["জানুয়ারি","ফেব্রুয়ারি","মার্চ","এপ্রিল","মে","জুন","জুলাই","আগস্ট","সেপ্টেম্বর","অক্টোবর","নভেম্বর","ডিসেম্বর"];
   const days = ["রবিবার","সোমবার","মঙ্গলবার","বুধবার","বৃহস্পতিবার","শুক্রবার","শনিবার"];
-  const bn = (n: number) => n.toString().replace(/\d/g, (x) => "০১২৩৪৫৬৭৮৯"[+x]);
   const d = new Date();
-  return `${days[d.getDay()]}, ${bn(d.getDate())} ${months[d.getMonth()]} ${bn(d.getFullYear())}`;
+  return `${days[d.getDay()]}, ${bnDigits(d.getDate())} ${months[d.getMonth()]} ${bnDigits(d.getFullYear())}`;
+}
+
+// Bangladesh revised Bengali calendar (effective 2019)
+function bnBengaliDate() {
+  const d = new Date();
+  const y = d.getFullYear();
+  const isLeap = (y % 4 === 0 && y % 100 !== 0) || y % 400 === 0;
+  // Month lengths starting from Boishakh
+  const lengths = [31,31,31,31,31,31,30,30,30,30, isLeap ? 30 : 29, 30];
+  const monthNames = ["বৈশাখ","জ্যৈষ্ঠ","আষাঢ়","শ্রাবণ","ভাদ্র","আশ্বিন","কার্তিক","অগ্রহায়ণ","পৌষ","মাঘ","ফাল্গুন","চৈত্র"];
+  // Boishakh 1 = April 14
+  const boishakhStart = new Date(y, 3, 14);
+  let bnYear: number;
+  let dayOfYear: number;
+  if (d.getTime() >= boishakhStart.getTime()) {
+    bnYear = y - 593;
+    dayOfYear = Math.floor((d.getTime() - boishakhStart.getTime()) / 86400000);
+  } else {
+    const prevStart = new Date(y - 1, 3, 14);
+    bnYear = y - 594;
+    dayOfYear = Math.floor((d.getTime() - prevStart.getTime()) / 86400000);
+  }
+  let m = 0;
+  let day = dayOfYear;
+  while (m < 12 && day >= lengths[m]) { day -= lengths[m]; m++; }
+  return `${bnDigits(day + 1)} ${monthNames[m] ?? "চৈত্র"} ${bnDigits(bnYear)}`;
 }
 
 export function Header() {
@@ -22,7 +51,7 @@ export function Header() {
   const { user, isEditor, signOut } = useAuth();
 
   useEffect(() => { fetchCategories().then(setCats).catch(() => {}); }, []);
-  useEffect(() => { setDateStr(bnDateNow()); }, []);
+  useEffect(() => { setDateStr(`${bnDateNow()} | ${bnBengaliDate()}`); }, []);
 
   const onSearch = (e: FormEvent) => {
     e.preventDefault();
