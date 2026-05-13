@@ -17,10 +17,12 @@ export function Header() {
   const [cats, setCats] = useState<Category[]>([]);
   const [open, setOpen] = useState(false);
   const [q, setQ] = useState("");
+  const [dateStr, setDateStr] = useState("");
   const nav = useNavigate();
   const { user, isEditor, signOut } = useAuth();
 
   useEffect(() => { fetchCategories().then(setCats).catch(() => {}); }, []);
+  useEffect(() => { setDateStr(bnDateNow()); }, []);
 
   const onSearch = (e: FormEvent) => {
     e.preventDefault();
@@ -33,23 +35,23 @@ export function Header() {
   return (
     <header className="sticky top-0 z-40 bg-background border-b border-border shadow-sm">
       {/* top strip */}
-      <div className="bg-sidebar text-sidebar-foreground text-xs">
+      <div className="text-xs text-white" style={{ background: "linear-gradient(90deg, #c8102e 0%, #ff6a00 100%)" }}>
         <div className="news-container flex justify-between items-center py-1.5">
-          <span className="opacity-80">{bnDateNow()}</span>
+          <span className="opacity-95">{dateStr || "\u00A0"}</span>
           <div className="flex items-center gap-3">
             {user ? (
               <>
                 {isEditor && (
-                  <Link to="/admin" className="flex items-center gap-1 hover:text-primary transition-colors">
+                  <Link to="/admin" className="flex items-center gap-1 hover:opacity-80 transition-opacity">
                     <ShieldCheck className="w-3.5 h-3.5" /> অ্যাডমিন
                   </Link>
                 )}
-                <button onClick={signOut} className="flex items-center gap-1 hover:text-primary transition-colors">
+                <button onClick={signOut} className="flex items-center gap-1 hover:opacity-80 transition-opacity">
                   <LogOut className="w-3.5 h-3.5" /> লগআউট
                 </button>
               </>
             ) : (
-              <Link to="/login" className="flex items-center gap-1 hover:text-primary transition-colors">
+              <Link to="/login" className="flex items-center gap-1 hover:opacity-80 transition-opacity">
                 <UserIcon className="w-3.5 h-3.5" /> লগইন
               </Link>
             )}
