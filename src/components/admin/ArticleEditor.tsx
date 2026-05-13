@@ -31,6 +31,7 @@ export function ArticleEditor({ id }: { id?: string }) {
   const [cats, setCats] = useState<Category[]>([]);
   const [form, setForm] = useState<ArticleForm>(empty);
   const [busy, setBusy] = useState(false);
+  const [uploading, setUploading] = useState(false);
 
   useEffect(() => {
     if (loading) return;
@@ -53,8 +54,24 @@ export function ArticleEditor({ id }: { id?: string }) {
 
   const set = <K extends keyof ArticleForm>(k: K, v: ArticleForm[K]) => setForm(s => ({ ...s, [k]: v }));
 
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) { toast.error("ফাইল ৫MB এর কম হতে হবে"); return; }
+    setUploading(true);
+    const ext = file.name.split(".").pop();
+    const path = `${user?.id}/${Date.now()}.${ext}`;
+    const { error: upErr } = await supabase.storage.from("article-images").upload(path, file, { upsert: false });
+    if (upErr) { toast.error(upErr.message); setUploading(false); return; }
+    const { data } = supabase.storage.from("article-images").getPublicUrl(path);
+    set("cover_image", data.publicUrl);
+    setUploading(false);
+    toast.success("থাম্বনেইল আপলোড হয়েছে");
+  };
+
   const save = async () => {
     if (!form.title.trim() || !form.content.trim()) { toast.error("শিরোনাম ও বিবরণ আবশ্যক"); return; }
+    if (!form.category_id) { toast.error("বিভাগ নির্বাচন করুন"); return; }
     setBusy(true);
     const slug = form.slug.trim() || slugify(form.title);
     const payload = {
@@ -78,38 +95,60 @@ export function ArticleEditor({ id }: { id?: string }) {
     <div className="news-container py-8 max-w-4xl">
       <h1 className="font-serif text-3xl font-bold mb-6 text-headline">{id ? "সংবাদ সম্পাদনা" : "নতুন সংবাদ"}</h1>
       <div className="bg-card rounded-lg border border-border p-6 space-y-4">
+        {/* 1. Thumbnail */}
         <div>
-          <Label>শিরোনাম *</Label>
+          <Label>১. থাম্বনেইল / ব্যাকগ্রাউন্ড ছবি *</Label>
+          <div className="mt-2 border-2 border-dashed border-border rounded-lg p-4 flex flex-col items-center gap-3">
+            {form.cover_image ? (
+              <img src={form.cover_image} alt="thumbnail" className="max-h-48 rounded object-cover" />
+            ) : (
+              <div className="text-sm text-muted-foreground py-6">এখনো কোনো ছবি আপলোড করা হয়নি</div>
+            )}
+            <input type="file" accept="image/*" onChange={handleFileUpload} disabled={uploading} className="text-sm" />
+            <p className="text-xs text-muted-foreground">{uploading ? "আপলোড হচ্ছে..." : "অথবা নিচে URL দিন"}</p>
+            <Input value={form.cover_image} onChange={e => set("cover_image", e.target.value)} placeholder="https://..." className="text-xs" />
+          </div>
+        </div>
+
+        {/* 2. Title */}
+        <div>
+          <Label>২. শিরোনাম *</Label>
           <Input value={form.title} onChange={e => set("title", e.target.value)} onBlur={() => !form.slug && set("slug", slugify(form.title))} placeholder="শিরোনাম লিখুন" />
         </div>
-        <div className="grid md:grid-cols-2 gap-4">
-          <div>
-            <Label>স্লাগ (URL)</Label>
-            <Input value={form.slug} onChange={e => set("slug", e.target.value)} placeholder="auto-generated" />
+
+        {/* 3. Description */}
+        <div>
+          <Label>৩. বিবরণ *</Label>
+          <Textarea rows={12} value={form.content} onChange={e => set("content", e.target.value)} placeholder="সংবাদের পূর্ণ বিবরণ লিখুন..." className="font-sans" />
+        </div>
+
+        {/* 4. Category */}
+        <div>
+          <Label>৪. বিভাগ *</Label>
+          <Select value={form.category_id} onValueChange={v => set("category_id", v)}>
+            <SelectTrigger><SelectValue placeholder="বিভাগ নির্বাচন করুন" /></SelectTrigger>
+            <SelectContent>
+              {cats.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}
+            </SelectContent>
+          </Select>
+        </div>
+
+        {/* Optional */}
+        <details className="border-t border-border pt-3">
+          <summary className="text-sm text-muted-foreground cursor-pointer">অতিরিক্ত (ঐচ্ছিক)</summary>
+          <div className="space-y-3 mt-3">
+            <div>
+              <Label>সারসংক্ষেপ</Label>
+              <Textarea rows={2} value={form.excerpt} onChange={e => set("excerpt", e.target.value)} />
+            </div>
+            <div>
+              <Label>স্লাগ (URL)</Label>
+              <Input value={form.slug} onChange={e => set("slug", e.target.value)} placeholder="auto-generated" />
+            </div>
           </div>
-          <div>
-            <Label>বিভাগ</Label>
-            <Select value={form.category_id} onValueChange={v => set("category_id", v)}>
-              <SelectTrigger><SelectValue placeholder="বিভাগ নির্বাচন" /></SelectTrigger>
-              <SelectContent>
-                {cats.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
-        <div>
-          <Label>কভার ইমেজ URL</Label>
-          <Input value={form.cover_image} onChange={e => set("cover_image", e.target.value)} placeholder="https://..." />
-        </div>
-        <div>
-          <Label>সারসংক্ষেপ</Label>
-          <Textarea rows={2} value={form.excerpt} onChange={e => set("excerpt", e.target.value)} />
-        </div>
-        <div>
-          <Label>বিবরণ * (অনুচ্ছেদ আলাদা করতে দু'টি Enter দিন)</Label>
-          <Textarea rows={12} value={form.content} onChange={e => set("content", e.target.value)} className="font-sans" />
-        </div>
-        <div className="flex flex-wrap gap-6">
+        </details>
+
+        <div className="flex flex-wrap gap-6 border-t border-border pt-4">
           <div className="flex items-center gap-2"><Switch checked={form.is_featured} onCheckedChange={v => set("is_featured", v)} /><Label>ফিচার্ড</Label></div>
           <div className="flex items-center gap-2"><Switch checked={form.is_breaking} onCheckedChange={v => set("is_breaking", v)} /><Label>ব্রেকিং</Label></div>
           <div className="flex items-center gap-2 ml-auto">
@@ -118,7 +157,7 @@ export function ArticleEditor({ id }: { id?: string }) {
           </div>
         </div>
         <div className="flex gap-2 pt-2">
-          <Button onClick={save} disabled={busy}>{busy ? "সংরক্ষণ..." : id ? "আপডেট" : "প্রকাশ করুন"}</Button>
+          <Button onClick={save} disabled={busy || uploading}>{busy ? "সংরক্ষণ..." : id ? "আপডেট" : "প্রকাশ করুন"}</Button>
           <Button variant="outline" onClick={() => navigate({ to: "/admin" })}>বাতিল</Button>
         </div>
       </div>

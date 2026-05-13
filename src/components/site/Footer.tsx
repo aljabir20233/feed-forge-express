@@ -35,9 +35,9 @@ export function Footer() {
         <div>
           <h4 className="text-sm font-semibold mb-3 text-primary">যোগাযোগ</h4>
           <p className="text-sm opacity-80 leading-relaxed">
-            সম্পাদক: জনাব কামাল হোসেন<br/>
-            <span>ইমেইল: editor@bankbimakhabor.com</span><br/>
-            ফোন: +৮৮ ০২ ৯৮৭৬৫৪৩
+            সম্পাদক: মনিরুজ্জামান<br/>
+            <span>ইমেইল: bankbimarkhabor@gmail.com</span><br/>
+            ফোন: +৮৮ ০১৯১১৫৬৭৬২৯
           </p>
         </div>
       </div>
