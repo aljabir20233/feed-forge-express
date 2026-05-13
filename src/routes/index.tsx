@@ -1,6 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useEffect } from "react";
 import { fetchPublishedArticles, fetchCategories, type Article } from "@/lib/queries";
+import { supabase } from "@/integrations/supabase/client";
 import { ArticleCard } from "@/components/site/ArticleCard";
 import { BreakingTicker } from "@/components/site/BreakingTicker";
 import { HeroSlider } from "@/components/site/HeroSlider";
@@ -37,16 +39,27 @@ function Section({ title, slug, articles }: { title: string; slug: string; artic
 }
 
 function HomePage() {
+  const qc = useQueryClient();
   const { data: articles = [], isLoading: la } = useQuery({
     queryKey: ["articles", "home"],
     queryFn: () => fetchPublishedArticles(50),
-    staleTime: 1000 * 60 * 2,
+    staleTime: 1000 * 30,
   });
   const { data: cats = [], isLoading: lc } = useQuery({
     queryKey: ["categories"],
     queryFn: fetchCategories,
     staleTime: 1000 * 60 * 30,
   });
+
+  useEffect(() => {
+    const ch = supabase
+      .channel("articles-home")
+      .on("postgres_changes", { event: "*", schema: "public", table: "articles" }, () => {
+        qc.invalidateQueries({ queryKey: ["articles"] });
+      })
+      .subscribe();
+    return () => { supabase.removeChannel(ch); };
+  }, [qc]);
 
   if (la || lc) {
     return <div className="news-container py-20 text-center text-muted-foreground">লোড হচ্ছে...</div>;
