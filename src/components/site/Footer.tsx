@@ -44,7 +44,10 @@ export function Footer() {
       <div className="border-t border-sidebar-border">
         <div className="news-container py-4 text-xs opacity-70 flex flex-col md:flex-row justify-between gap-2">
           <span>© {new Date().getFullYear()} Bank Bima Khabor • সর্বস্বত্ব সংরক্ষিত</span>
-          <span>প্রকাশক ও সম্পাদক কর্তৃক প্রকাশিত</span>
+          <span className="flex items-center gap-3">
+            <Link to="/admin/login" className="hover:text-primary">অ্যাডমিন লগইন</Link>
+            <span>প্রকাশক ও সম্পাদক কর্তৃক প্রকাশিত</span>
+          </span>
         </div>
       </div>
     </footer>
