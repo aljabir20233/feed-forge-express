@@ -79,15 +79,6 @@ function LoginPage() {
           Google দিয়ে লগইন
         </button>
 
-        <button
-          onClick={adminLogin}
-          disabled={busy}
-          className="w-full flex items-center justify-center gap-2 rounded-md py-2.5 text-sm font-medium text-white mb-4 disabled:opacity-60"
-          style={{ background: "linear-gradient(90deg, #c8102e 0%, #ff6a00 100%)" }}
-        >
-          <ShieldCheck className="w-4 h-4" /> অ্যাডমিন লগইন (Milton)
-        </button>
-
         <div className="flex items-center gap-3 mb-4">
           <div className="flex-1 h-px bg-border" />
           <span className="text-xs text-muted-foreground">অথবা</span>
