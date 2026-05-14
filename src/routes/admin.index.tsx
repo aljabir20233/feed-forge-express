@@ -12,18 +12,18 @@ export const Route = createFileRoute("/admin/")({
 });
 
 function AdminDashboard() {
-  const { user, isEditor, isAdmin, loading } = useAuth();
+  const { user, isEditor, isAdmin, loading, rolesLoaded } = useAuth();
   const navigate = useNavigate();
   const [articles, setArticles] = useState<Article[]>([]);
   const [busy, setBusy] = useState(true);
 
   useEffect(() => {
-    if (loading) return;
-    if (!user) { navigate({ to: "/login" }); return; }
+    if (loading || !rolesLoaded) return;
+    if (!user) { navigate({ to: "/admin/login" }); return; }
     if (!isEditor) { setBusy(false); return; }
     supabase.from("articles").select("*, categories(name,slug,color)").order("created_at", { ascending: false })
       .then(({ data }) => { setArticles((data ?? []) as unknown as Article[]); setBusy(false); });
-  }, [loading, user, isEditor, navigate]);
+  }, [loading, rolesLoaded, user, isEditor, navigate]);
 
   const onDelete = async (id: string) => {
     if (!confirm("সংবাদটি মুছে ফেলবেন?")) return;
