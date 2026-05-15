@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
-import { Plus, Pencil, Trash2, ShieldCheck, FileText } from "lucide-react";
+import { Plus, Pencil, Trash2, ShieldCheck, FileText, Users } from "lucide-react";
 import { toast } from "sonner";
 import type { Article } from "@/lib/queries";
 
@@ -63,7 +63,10 @@ function AdminDashboard() {
           <h1 className="font-serif text-3xl font-bold text-headline">অ্যাডমিন প্যানেল</h1>
           <p className="text-sm text-muted-foreground">{isAdmin ? "অ্যাডমিন" : "এডিটর"} হিসেবে লগইন</p>
         </div>
-        <Link to="/admin/new"><Button><Plus className="w-4 h-4 mr-1" /> নতুন সংবাদ</Button></Link>
+        <div className="flex gap-2">
+          {isAdmin && <Link to="/admin/users"><Button variant="outline"><Users className="w-4 h-4 mr-1" /> ব্যবহারকারী</Button></Link>}
+          <Link to="/admin/new"><Button><Plus className="w-4 h-4 mr-1" /> নতুন সংবাদ</Button></Link>
+        </div>
       </div>
 
       <div className="grid sm:grid-cols-3 gap-4 mb-8">
