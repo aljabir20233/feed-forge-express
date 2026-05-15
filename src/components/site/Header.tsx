@@ -91,9 +91,9 @@ export function Header() {
       {/* logo row */}
       <div className="news-container flex items-center justify-between py-4 gap-4">
         <Link to="/" className="flex items-center gap-3">
-          <img src={logo} alt="Bank Bima Khabor logo" className="h-12 md:h-14 w-auto" />
+          <img src={logo} alt="ব্যাংক বীমা খবর logo" className="h-12 md:h-14 w-auto" />
           <div className="hidden sm:block">
-            <div className="font-serif text-xl md:text-2xl font-bold text-primary leading-none">Bank Bima Khabor</div>
+            <div className="font-serif text-xl md:text-2xl font-bold text-primary leading-none">ব্যাংক বীমা খবর</div>
             <div className="text-[10px] text-muted-foreground tracking-wide mt-1">A Financial Magazine Monthly</div>
           </div>
         </Link>

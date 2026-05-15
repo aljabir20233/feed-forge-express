@@ -22,7 +22,7 @@ export type ArticleForm = {
 
 const empty: ArticleForm = {
   title: "", slug: "", excerpt: "", content: "", cover_image: "",
-  category_id: "", status: "draft", is_featured: false, is_breaking: false,
+  category_id: "", status: "published", is_featured: false, is_breaking: false,
 };
 
 export function ArticleEditor({ id }: { id?: string }) {

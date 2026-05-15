@@ -49,7 +49,7 @@ function LoginPage() {
   return (
     <div className="news-container py-16 max-w-md">
       <div className="bg-card rounded-lg border border-border p-6 shadow-sm">
-        <h1 className="font-serif text-2xl font-bold mb-1 text-headline">Bank Bima Khabor-এ স্বাগতম</h1>
+        <h1 className="font-serif text-2xl font-bold mb-1 text-headline">ব্যাংক বীমা খবর-এ স্বাগতম</h1>
         <p className="text-sm text-muted-foreground mb-5">লগইন করুন অথবা নতুন অ্যাকাউন্ট খুলুন</p>
 
         <button
