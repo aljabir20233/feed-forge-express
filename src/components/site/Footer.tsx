@@ -11,8 +11,8 @@ export function Footer() {
       <div className="news-container py-12 grid md:grid-cols-4 gap-8">
         <div>
           <div className="flex items-center gap-3 mb-3">
-            <img src={logo} alt="Bank Bima Khabor" className="h-12 w-auto bg-white rounded p-1" />
-            <div className="font-serif text-xl font-bold text-primary">Bank Bima Khabor</div>
+            <img src={logo} alt="ব্যাংক বীমা খবর" className="h-12 w-auto bg-white rounded p-1" />
+            <div className="font-serif text-xl font-bold text-primary">ব্যাংক বীমা খবর</div>
           </div>
           <p className="text-sm opacity-80 leading-relaxed">A Financial Magazine Monthly. দেশের ব্যাংক, বীমা ও অর্থনীতির নির্ভরযোগ্য সংবাদের ঠিকানা।</p>
         </div>
@@ -43,7 +43,7 @@ export function Footer() {
       </div>
       <div className="border-t border-sidebar-border">
         <div className="news-container py-4 text-xs opacity-70 flex flex-col md:flex-row justify-between gap-2">
-          <span>© {new Date().getFullYear()} Bank Bima Khabor • সর্বস্বত্ব সংরক্ষিত</span>
+          <span>© {new Date().getFullYear()} ব্যাংক বীমা খবর • সর্বস্বত্ব সংরক্ষিত</span>
           <span className="flex items-center gap-3">
             <Link to="/admin/login" className="hover:text-primary">অ্যাডমিন লগইন</Link>
             <span>প্রকাশক ও সম্পাদক কর্তৃক প্রকাশিত</span>
