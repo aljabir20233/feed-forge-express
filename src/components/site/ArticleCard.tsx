@@ -1,8 +1,10 @@
 import { Link } from "@tanstack/react-router";
 import type { Article } from "@/lib/queries";
 import { timeAgoBn } from "@/lib/queries";
+import { useReveal } from "@/hooks/use-reveal";
 
 export function ArticleCard({ a, size = "md" }: { a: Article; size?: "sm" | "md" | "lg" | "hero" }) {
+  const reveal = useReveal<HTMLAnchorElement>();
   const cat = a.categories;
   if (size === "hero") {
     return (
