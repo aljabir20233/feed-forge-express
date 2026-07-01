@@ -112,8 +112,6 @@ function HomePage() {
           />
         </div>
 
-        {/* HEADLINES AGGREGATOR */}
-        <HeadlinesAggregator />
 
         {/* CATEGORY SECTIONS */}
         {cats.filter((c: any) => bySlug(c.slug).length > 0).slice(0, 8).map((c: any) => (
