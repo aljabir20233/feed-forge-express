@@ -7,7 +7,7 @@ import { ArticleCard } from "@/components/site/ArticleCard";
 import { BreakingTicker } from "@/components/site/BreakingTicker";
 import { HeroSlider } from "@/components/site/HeroSlider";
 import { SidebarTabs } from "@/components/site/SidebarTabs";
-import { HeadlinesAggregator } from "@/components/site/HeadlinesAggregator";
+
 import { Link } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/")({
@@ -112,8 +112,6 @@ function HomePage() {
           />
         </div>
 
-        {/* HEADLINES AGGREGATOR */}
-        <HeadlinesAggregator />
 
         {/* CATEGORY SECTIONS */}
         {cats.filter((c: any) => bySlug(c.slug).length > 0).slice(0, 8).map((c: any) => (
