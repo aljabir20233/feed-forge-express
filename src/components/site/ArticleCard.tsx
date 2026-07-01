@@ -8,7 +8,7 @@ export function ArticleCard({ a, size = "md" }: { a: Article; size?: "sm" | "md"
   const cat = a.categories;
   if (size === "hero") {
     return (
-      <Link to="/article/$slug" params={{ slug: a.slug }} className="group block relative overflow-hidden rounded-lg bg-card">
+      <Link ref={reveal} to="/article/$slug" params={{ slug: a.slug }} className="group block relative overflow-hidden rounded-lg bg-card">
         <div className="aspect-[16/10] overflow-hidden bg-muted">
           {a.cover_image && <img src={a.cover_image} alt={a.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />}
         </div>
@@ -24,7 +24,7 @@ export function ArticleCard({ a, size = "md" }: { a: Article; size?: "sm" | "md"
   }
   if (size === "lg") {
     return (
-      <Link to="/article/$slug" params={{ slug: a.slug }} className="group block bg-card rounded-lg overflow-hidden border border-border hover:shadow-lg transition-shadow">
+      <Link ref={reveal} to="/article/$slug" params={{ slug: a.slug }} className="group block bg-card rounded-lg overflow-hidden border border-border hover:shadow-lg transition-shadow">
         <div className="aspect-[16/9] overflow-hidden bg-muted">
           {a.cover_image && <img src={a.cover_image} alt={a.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />}
         </div>
@@ -39,7 +39,7 @@ export function ArticleCard({ a, size = "md" }: { a: Article; size?: "sm" | "md"
   }
   if (size === "sm") {
     return (
-      <Link to="/article/$slug" params={{ slug: a.slug }} className="group flex gap-3 py-3 border-b border-border last:border-0">
+      <Link ref={reveal} to="/article/$slug" params={{ slug: a.slug }} className="group flex gap-3 py-3 border-b border-border last:border-0">
         <div className="w-24 h-20 flex-shrink-0 rounded overflow-hidden bg-muted">
           {a.cover_image && <img src={a.cover_image} alt={a.title} className="w-full h-full object-cover" loading="lazy" />}
         </div>
@@ -51,7 +51,7 @@ export function ArticleCard({ a, size = "md" }: { a: Article; size?: "sm" | "md"
     );
   }
   return (
-    <Link to="/article/$slug" params={{ slug: a.slug }} className="group block bg-card rounded-lg overflow-hidden border border-border hover:shadow-md transition-shadow">
+    <Link ref={reveal} to="/article/$slug" params={{ slug: a.slug }} className="group block bg-card rounded-lg overflow-hidden border border-border hover:shadow-md transition-shadow">
       <div className="aspect-[4/3] overflow-hidden bg-muted">
         {a.cover_image && <img src={a.cover_image} alt={a.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />}
       </div>
