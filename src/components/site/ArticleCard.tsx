@@ -3,8 +3,9 @@ import type { Article } from "@/lib/queries";
 import { timeAgoBn } from "@/lib/queries";
 import { useReveal } from "@/hooks/use-reveal";
 
-export function ArticleCard({ a, size = "md" }: { a: Article; size?: "sm" | "md" | "lg" | "hero" }) {
-  const reveal = useReveal<HTMLAnchorElement>();
+export function ArticleCard({ a, size = "md", index = 0 }: { a: Article; size?: "sm" | "md" | "lg" | "hero"; index?: number }) {
+  const variant = size === "sm" ? "left" : size === "hero" ? "scale" : "up";
+  const reveal = useReveal<HTMLAnchorElement>({ variant, delay: Math.min(index, 6) * 80 });
   const cat = a.categories;
   if (size === "hero") {
     return (
