@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { fetchArticleBySlug, fetchPublishedArticles, formatBnDate, type Article } from "@/lib/queries";
 import { ArticleCard } from "@/components/site/ArticleCard";
 import { ShareButtons } from "@/components/site/ShareButtons";
-import { supabase } from "@/integrations/supabase/client";
+import { incrementArticleView } from "@/lib/article-views.functions";
 import { Calendar, Eye } from "lucide-react";
 
 export const Route = createFileRoute("/article/$slug")({
@@ -20,7 +20,7 @@ function ArticlePage() {
     setLoading(true);
     fetchArticleBySlug(slug).then(setA).finally(() => setLoading(false));
     fetchPublishedArticles(8).then(setRelated);
-    supabase.rpc("increment_article_view", { _slug: slug }).then(() => {});
+    incrementArticleView({ data: { slug } }).catch(() => {});
   }, [slug]);
 
   if (loading) return <div className="news-container py-20 text-center text-muted-foreground">লোড হচ্ছে...</div>;
