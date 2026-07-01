@@ -32,7 +32,7 @@ function Section({ title, slug, articles }: { title: string; slug: string; artic
         <Link to="/category/$slug" params={{ slug }} className="text-xs text-primary hover:underline">আরও দেখুন →</Link>
       </div>
       <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {articles.slice(0, 4).map(a => <ArticleCard key={a.id} a={a} />)}
+        {articles.slice(0, 4).map((a, i) => <ArticleCard key={a.id} a={a} index={i} />)}
       </div>
     </section>
   );
@@ -89,7 +89,7 @@ function HomePage() {
               <ArticleCard a={hero} size="hero" />
             </div>
             <div className="space-y-4">
-              {heroSide.map((a: Article) => <ArticleCard key={a.id} a={a} size="lg" />)}
+              {heroSide.map((a: Article, i: number) => <ArticleCard key={a.id} a={a} size="lg" index={i} />)}
             </div>
           </div>
         )}
@@ -103,7 +103,7 @@ function HomePage() {
               </h2>
             </div>
             <div className="grid sm:grid-cols-2 gap-4">
-              {latest.map((a: Article) => <ArticleCard key={a.id} a={a} />)}
+              {latest.map((a: Article, i: number) => <ArticleCard key={a.id} a={a} index={i} />)}
             </div>
           </div>
           <SidebarTabs

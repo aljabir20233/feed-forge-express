@@ -42,7 +42,7 @@ function SearchPage() {
         <p className="text-muted-foreground py-12 text-center">কোনো সংবাদ পাওয়া যায়নি।</p>
       )}
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {results.map((a) => <ArticleCard key={a.id} a={a} />)}
+        {results.map((a, i) => <ArticleCard key={a.id} a={a} index={i} />)}
       </div>
     </div>
   );

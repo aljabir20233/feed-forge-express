@@ -54,7 +54,7 @@ function CategoryPage() {
         <div className="py-16 text-center text-muted-foreground">এই বিভাগে এখনও কোনো সংবাদ নেই</div>
       ) : (
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          {articles.map((a: any) => <ArticleCard key={a.id} a={a} size="lg" />)}
+          {articles.map((a: any, i: number) => <ArticleCard key={a.id} a={a} size="lg" index={i} />)}
         </div>
       )}
     </div>
