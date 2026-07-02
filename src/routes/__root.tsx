@@ -116,22 +116,30 @@ import { AuthProvider } from "@/hooks/use-auth";
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
 import { Toaster } from "@/components/ui/sonner";
+import { MotionProvider } from "@/hooks/use-motion-prefs";
+import { MotionSettings } from "@/components/site/MotionSettings";
+import { useEffect } from "react";
+import { installCssErrorLogger } from "@/lib/css-error-log";
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  useEffect(() => { installCssErrorLogger(); }, []);
 
   return (
     <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <div className="min-h-screen flex flex-col">
-          <Header />
-          <main className="flex-1">
-            <Outlet />
-          </main>
-          <Footer />
-        </div>
-        <Toaster richColors position="top-right" />
-      </AuthProvider>
+      <MotionProvider>
+        <AuthProvider>
+          <div className="min-h-screen flex flex-col">
+            <Header />
+            <main className="flex-1">
+              <Outlet />
+            </main>
+            <Footer />
+          </div>
+          <MotionSettings />
+          <Toaster richColors position="top-right" />
+        </AuthProvider>
+      </MotionProvider>
     </QueryClientProvider>
   );
 }
