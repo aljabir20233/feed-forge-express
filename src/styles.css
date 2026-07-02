@@ -149,3 +149,24 @@
   .hover-lift { transition: transform 0.35s cubic-bezier(0.22,1,0.36,1), box-shadow 0.35s ease; }
   .hover-lift:hover { transform: translateY(-4px); box-shadow: 0 10px 30px -12px rgba(0,0,0,0.18); }
 }
+
+/* Motion intensity — set on <html data-motion="..."> by MotionProvider */
+[data-motion="off"] *,
+[data-motion="off"] *::before,
+[data-motion="off"] *::after {
+  animation: none !important;
+  transition: none !important;
+}
+[data-motion="off"] .reveal { opacity: 1 !important; transform: none !important; filter: none !important; }
+[data-motion="off"] .ticker-track { animation: none !important; }
+
+[data-motion="subtle"] .reveal { filter: none; transition-duration: 0.4s; }
+[data-motion="subtle"] .reveal-up { transform: translate3d(0, 12px, 0); }
+[data-motion="subtle"] .reveal-left { transform: translate3d(-16px, 0, 0); }
+[data-motion="subtle"] .reveal-right { transform: translate3d(16px, 0, 0); }
+[data-motion="subtle"] .reveal-scale { transform: scale(0.98); }
+[data-motion="subtle"] .hover-lift:hover { transform: translateY(-2px); }
+
+[data-motion="full"] .reveal { transition-duration: 1.1s; filter: blur(10px); }
+[data-motion="full"] .reveal-up { transform: translate3d(0, 56px, 0); }
+[data-motion="full"] .hover-lift:hover { transform: translateY(-6px) scale(1.01); }
