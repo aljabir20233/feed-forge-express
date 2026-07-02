@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Plus, Pencil, Trash2, ShieldCheck, FileText, Users } from "lucide-react";
 import { toast } from "sonner";
 import type { Article } from "@/lib/queries";
+import { CssDebugPanel } from "@/components/admin/CssDebugPanel";
 
 export const Route = createFileRoute("/admin/")({
   component: AdminDashboard,
@@ -102,9 +103,14 @@ function AdminDashboard() {
           {articles.length === 0 && <div className="px-4 py-10 text-center text-muted-foreground">কোনো সংবাদ নেই</div>}
         </div>
       </div>
+
+      <div className="mt-8">
+        <CssDebugPanel />
+      </div>
     </div>
   );
 }
+
 
 function Stat({ label, value }: { label: string; value: number }) {
   const bn = (n: number) => n.toString().replace(/\d/g, (x) => "০১২৩৪৫৬৭৮৯"[+x]);
