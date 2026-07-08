@@ -105,7 +105,8 @@ function AdminDashboard() {
         </div>
       </div>
 
-      <div className="mt-8">
+      <div className="mt-8 space-y-6">
+        {isAdmin && <MotionDefaultSetting />}
         <CssDebugPanel />
       </div>
     </div>
