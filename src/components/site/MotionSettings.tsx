@@ -10,7 +10,7 @@ const OPTIONS: { value: MotionIntensity; label: string }[] = [
 ];
 
 export function MotionSettings() {
-  const { intensity, setIntensity } = useMotionPrefs();
+  const { intensity, setIntensity, siteDefault, userOverridden, resetToSiteDefault } = useMotionPrefs();
   const [open, setOpen] = useState(false);
 
   return (
@@ -32,6 +32,14 @@ export function MotionSettings() {
                 {o.label}
               </button>
             ))}
+          </div>
+          <div className="mt-2 text-[10px] text-muted-foreground flex items-center justify-between gap-2">
+            <span>সাইট ডিফল্ট: <b>{OPTIONS.find(o => o.value === siteDefault)?.label}</b></span>
+            {userOverridden && (
+              <button onClick={resetToSiteDefault} className="underline hover:text-foreground">
+                রিসেট
+              </button>
+            )}
           </div>
         </div>
       )}

@@ -7,6 +7,7 @@ import { Plus, Pencil, Trash2, ShieldCheck, FileText, Users } from "lucide-react
 import { toast } from "sonner";
 import type { Article } from "@/lib/queries";
 import { CssDebugPanel } from "@/components/admin/CssDebugPanel";
+import { MotionDefaultSetting } from "@/components/admin/MotionDefaultSetting";
 
 export const Route = createFileRoute("/admin/")({
   component: AdminDashboard,
@@ -104,7 +105,8 @@ function AdminDashboard() {
         </div>
       </div>
 
-      <div className="mt-8">
+      <div className="mt-8 space-y-6">
+        {isAdmin && <MotionDefaultSetting />}
         <CssDebugPanel />
       </div>
     </div>
